@@ -16,6 +16,8 @@ Agent Workflow（代理工作流程，指協調語言模型、記憶檢索、規
 >    - `06-voyager.pdf`（Wang et al., 2023，具身終身學習課綱、技能庫與自我驗證迴圈）
 > 2. **綜述回顧之次級引用（Secondary Citations via Survey）**：
 >    - ReAct、ChatDev、MetaGPT、ToT、GoT、RAP、DEPS、ReWOO、Self-Refine 等方法，**其內容完全來自綜述文獻 `01-llm-agent-survey.pdf`（Wang et al., 2024）之回顧與歸納，本 Wiki 目前尚未直接 Ingest 這些個別方法的原始論文**。所有論點皆以相應文獻之描述為準。
+> 3. **內部專案設計文件（Internal Design Case）**：
+>    - Project E.X.I.T.（`project-exit-design.md`，遊戲系統多代理協作應用案例）。標示為 `Source: Project E.X.I.T. Design Document`，僅代表內部專案之設計規劃（Planned），**不能作為外部學術研究之實證證據**。
 
 ## 2. Core Concept
 根據目前已 Ingest 來源文獻之梳理，文獻支持的 Agent Workflow 主要涵蓋以下核心型態：
@@ -65,6 +67,20 @@ Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與�
   - GPT-4 生成/微調控制程式碼 $\to$ Mineflayer 於 Minecraft 執行程式碼並收集環境反饋（`bot.chat()`）與解譯器語法/執行報錯 $\to$ GPT-4 Self-Verification Critic 評判任務是否真正完成並提供 Critique。
 - **技能固化與演化（Skill Commitment）**：若驗證成功，由 GPT-3.5 生成技能描述並計算 Embedding 索引，將程式碼存入技能庫，並更新課綱完成進度；若 4 輪皆失敗，課綱記錄失敗並切換至其他任務。
 
+### (10) 遊戲系統應用工作流程（Project E.X.I.T. Application Workflow，Internal Design Case）
+> [!NOTE]
+> 本段整理自 `project-exit-design.md`，標示為 `Source: Project E.X.I.T. Design Document`。來源只支援專案設計規劃，不作為一般 AI Agent 效能的學術證據；所有內容均屬 Planned，且文件沒有說明個別功能的實作完成度。
+
+設計文件目前可直接支持的工作流程資訊如下：
+- **Core Loop**：基地準備 $\to$ 接受任務 $\to$ 進入地圖 $\to$ 探索 / 搜刮 / 戰鬥 $\to$ AI 動態事件 $\to$ 撤離 $\to$ 結算 $\to$ 返回基地。
+- **AI Director**：預計讀取 `Player HP`、`Inventory`、`Location`、`Mission progress`、`Remaining time`、`Base resources`，再決定 `Dynamic quest`、`Optional event`、`Risk warning` 或 `NPC response`。
+- **Tool Use**：規劃用於取得 Game State、Inventory、Map、Mission 等實際遊戲資料。
+- **RAG**：規劃讓 NPC 查詢世界觀、地圖、物品與角色知識。
+- **Planning**：規劃用於多步驟複合任務。
+- **Reflection**：規劃檢查任務是否可完成、是否與 Game State 衝突、獎勵是否合理。
+- **Agent Workflow**：文件明示區分 AI Director、Quest Agent、NPC Agent 與 Game System，但**未提供完整的 agent-to-agent 執行順序、訊息格式或 orchestration state machine**。
+- **Deterministic boundary**：角色移動、碰撞、HP 扣除、掉落機率、背包容量等明確規則由一般遊戲程式處理，不交給 LLM 即時決定。
+
 ## 3. Why It Matters
 - **化解長程任務（Long-horizon Tasks）的脆弱性**：在複雜環境中，一開始擬定的初始計畫極難完美，一旦環境狀態改變或發生未預期錯誤，靜態流程便告崩潰；導入包含 Feedback 與動態 Re-planning 的工作流程能賦予代理適應性（Wang et al., 2024）。
 - **結合符號規劃以提升長程任務可行性**：單靠神經網路推論無法保證長程動作序列的前置條件完全滿足；透過嵌入 LLM+P 這類外部符號規劃子流程，在 Problem PDDL 正確且求解成功的條件下，能借助經典規劃器生成高可行性或最優計畫，但端到端表現仍取決於前端自然語言轉譯的準確性（Liu et al., 2023）。
@@ -88,7 +104,7 @@ Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與�
 - **內部自回歸中斷/解碼視角（模型計算層次，如 Schick et al., 2023 與 Lewis et al., 2020）**：Toolformer 將工具執行視為語言模型自身解碼過程中的同步「中斷-填充」流程；RAG 則在模型架構內部透過潛在變數邊緣化完成「檢索-拼接-生成」流程，未建立外部排程狀態機。
 
 ## 5. Example
-*註：案例 1–3 引自 Wang et al. (2024) 綜述論文之回顧整理，非本 Wiki 已 Ingest 原始論文；案例 4–7 來自直接 Ingest 之原始文獻：*
+*註：案例 1–3 引自 Wang et al. (2024) 綜述論文之回顧整理；案例 4–7 來自直接 Ingest 之原始研究；案例 8 為 Project E.X.I.T. 內部設計文件之應用整理：*
 1. **ReAct 工作流程（引自 Wang et al., 2024 綜述）**：
    - 階段 1（Thought）：Agent 根據目前目標分析現狀，思考需要哪些資訊。
    - 階段 2（Act）：輸出標準工具呼叫指令（如 `Search[主題]`）。
@@ -110,6 +126,11 @@ Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與�
    - 在 AlfWorld 決策任務中，Trial 1 因動作順序不當導致在 desk 2 找不到檯燈而失敗 $\to$ Self-Reflection 模型產生反思「desk 1 上有檯燈，應先去 desk 1 取檯燈再找杯子」並寫入長期情節記憶 $\to$ Trial 2 Actor 讀取該反思，直接前往 desk 1 取得檯燈，順利完成任務。
 7. **VOYAGER 具身迭代提示與技能合成流程（Wang et al., 2023）**：
    - VOYAGER 的 Automatic Curriculum 可提出 `Craft 1 stone pickaxe` 等任務；在 iterative prompting 的 Figure 5 中，另一個程式生成案例展示模型如何根據 environment feedback 發現材料不足並補充 planks/sticks，以及根據 execution error `No item named acacia_axe` 將不存在的 `acacia_axe` 修正為可用的 wooden axe。這些回饋會被加入下一輪 GPT-4 prompt，直到 self-verification 判定成功或最多完成 4 輪 code generation。一旦驗證成功，新技能程式碼即被存入向量資料庫以供後續複合任務檢索呼叫。
+8. **Project E.X.I.T. 遊戲系統應用（Internal Design Case）**：
+   - 設計文件明示的 Core Loop 為「基地準備 $\to$ 接受任務 $\to$ 進入地圖 $\to$ 探索 / 搜刮 / 戰鬥 $\to$ AI 動態事件 $\to$ 撤離 $\to$ 結算 $\to$ 返回基地」。
+   - AI Director 預計讀取 `Player HP`、`Inventory`、`Location`、`Mission progress`、`Remaining time`、`Base resources`，並決定 `Dynamic quest`、`Optional event`、`Risk warning` 或 `NPC response`。
+   - Tool Use、RAG、Planning、Reflection 與 Agent Workflow 的用途依設計文件規劃；角色移動、碰撞、HP 扣除、掉落機率與背包容量仍由一般遊戲程式處理。
+   - **來源沒有提供具體事件內容、數值門檻或完整的角色間執行時序，因此此處不自行補寫。**
 
 ## 6. Limitations / Notes
 根據現有文獻明確指出的限制，以及當前批次資料的覆蓋邊界：
@@ -117,9 +138,9 @@ Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與�
 2. **缺乏多輪互動探索（Non-interactive）**：Toolformer 與 RAG 原始流程均屬於單次檢索/呼叫觸發，無法像人類一樣在搜尋引擎中翻頁或多次重新下關鍵字（Schick et al., 2023; Lewis et al., 2020）。
 3. **外部規劃管線依賴前提完備性**：LLM+P 的管線若要成功，仰賴人類專家預先給定完整無誤的領域規則（Domain PDDL），且若 LLM 轉譯出的 Problem PDDL 出現細微狀態遺漏，外部求解流程將直接宣告無解（Liu et al., 2023）。
 4. **推論延遲累積（Latency Overhead）**：多步驟串聯、多路徑搜尋（如 ToT、RAP）以及多代理反覆對話的工作流程，會使推論時間急遽增加（Wang et al., 2024）。
-5. **文獻覆蓋限制與未包含內容**：
-   - 本頁內容嚴格受限於已 Ingest 之 `01-llm-agent-survey.pdf`、`02-toolformer.pdf`、`03-rag.pdf`、`04-llm-plus-p.pdf`、`05-reflexion.pdf` 與 `06-voyager.pdf`。
-   - 目前文獻尚未提及遊戲專用之自建專案架構（如 Project E.X.I.T.）、AI Director 或即時遊戲狀態機（待後續遊戲應用內部來源批次文獻提供）。
+5. **文獻覆蓋限制與來源邊界**：
+   - 本頁內容整合 6 篇已 Ingest 之外部學術來源（`01` 至 `06`）與 1 份內部專案設計文件（`project-exit-design.md`）。
+   - 外部學術文獻提供通用 Agent Workflow 範式與具身探索實證；Project E.X.I.T. 僅代表自建遊戲系統之設計意圖與架構規劃（Planned），不能作為外部學術研究之實證證據。
 
 ## 7. References
 - **Wang et al. (2024)**: Lei Wang, Chen Ma, Xueyang Feng, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhi-Yuan Chen, Jiakai Tang, Xu Chen, Yankai Lin, Wayne Xin Zhao, Zhewei Wei, Ji-Rong Wen. *A Survey on Large Language Model based Autonomous Agents*. Frontiers of Computer Science, 2024, 18(6): 186345. (DOI: 10.1007/s11704-024-40231-1; arXiv:2308.11432v7, revised 2025-03-02). [01-llm-agent-survey.pdf](../raw/01-llm-agent-survey.pdf)
@@ -128,5 +149,6 @@ Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與�
 - **Liu et al. (2023)**: Bo Liu, Yuqian Jiang, Xiaohan Zhang, Qiang Liu, Shiqi Zhang, Joydeep Biswas, Peter Stone. *LLM+P: Empowering Large Language Models with Optimal Planning Proficiency*. arXiv preprint arXiv:2304.11477v3 [cs.AI], 27 Sep 2023. [04-llm-plus-p.pdf](../raw/04-llm-plus-p.pdf)
 - **Shinn et al. (2023)**: Noah Shinn, Federico Cassano, Edward Berman, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. *Reflexion: Language Agents with Verbal Reinforcement Learning*. arXiv preprint arXiv:2303.11366v4 [cs.AI], 10 Oct 2023. [05-reflexion.pdf](../raw/05-reflexion.pdf)（註：後續正式發表於 NeurIPS 2023，正式版作者名單未列 Edward Berman）。
 - **Wang et al. (2023)**: Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, Anima Anandkumar. *VOYAGER: An Open-Ended Embodied Agent with Large Language Models*. arXiv preprint arXiv:2305.16291v2 [cs.AI], 19 Oct 2023. [06-voyager.pdf](../raw/06-voyager.pdf)（註：後續正式發表於 TMLR, March 2024）。
+- **Project E.X.I.T. Design Document**: *Project E.X.I.T. Design Document*. Internal Project Design Document. [project-exit-design.md](../raw/project-exit-design.md)
 - **次級引用聲明（Secondary Citations via Survey）**：
   - ReAct (Yao et al., 2022 / ICLR 2023)、ReWOO (Xu et al., 2023)、ChatDev (Qian et al., 2023)、ToT (Yao et al., 2023)、GoT (Besta et al., 2023)、RAP (Hao et al., 2023)、DEPS (Wang et al., 2023)、Self-Refine (Madaan et al., 2023) 等方法，本專案目前皆是經由 Wang et al. (2024) 綜述論文獲取其回顧性論點，尚未直接 Ingest 其原始研究論文。

@@ -126,6 +126,27 @@
 
 ---
 
+## Internal Sources (內部專案來源)
+
+### 7. Project E.X.I.T. Design Document
+- **Title**: Project E.X.I.T. Design Document
+- **Author / Owner**: Not specified in current design document
+- **Date / Version**: Not specified in current design document
+- **Original URL or file reference**: [project-exit-design.md](../raw/project-exit-design.md)
+- **Source type**: Internal Project Design Document / Application Case Source
+- **Implementation status**: Design-stage / Planned; the document does not state which individual functions are already implemented.
+- **Covered topics**:
+  - 專案核心循環（基地準備 → 接受任務 → 進入地圖 → 探索 / 搜刮 / 戰鬥 → AI 動態事件 → 撤離 → 結算 → 返回基地）
+  - AI Director 規劃架構（預計讀取 Player HP、Inventory、Location、Mission progress、Remaining time、Base resources，動態決定任務、事件、警報或 NPC 回應）
+  - 規劃導入之 AI Agent 技術（Tool Use 取得遊戲資料、RAG 知識查詢、Planning 複合任務拆解、Reflection 任務與狀態驗證、Agent Workflow 系統分工）
+  - 系統邏輯邊界（角色移動、碰撞、HP 扣除、掉落機率、背包容量等明確規則由一般遊戲程式處理，不交給 LLM 即時決定）
+  - 專案實作狀態（明確標示全案屬於設計規劃階段，不代表所有功能已完成實作）
+- **Evidence boundary**:
+  `This source supports only Project E.X.I.T. design descriptions and implementation intentions. It is not academic evidence for general AI Agent effectiveness.`（本文件僅支援 Project E.X.I.T. 的自建應用案例與設計意圖描述，不能作為一般性 AI Agent 研究成效的學術證據）
+- **Not specified in current design document**: model/provider, Prompt design, Tool schema, RAG implementation details, Planning algorithm, Reflection execution loop, exact inter-agent orchestration, trigger thresholds, evaluation metrics.
+
+---
+
 ## Pending Sources (尚未 Ingest 之來源)
-*依據規範，待後續批次逐一處理，目前嚴禁讀取或引用：*
-- 內部來源：Project E.X.I.T. 設計文件（`../raw/project-exit-design.md`，待遊戲應用批次開放）
+*本專案規劃之 6 篇外部學術來源與 1 份內部設計文件已全數完成 Ingest。*
+- **No pending planned sources.**
