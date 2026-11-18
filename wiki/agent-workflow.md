@@ -1,15 +1,21 @@
 # Agent Workflow（代理工作流程）
 
 ## 1. Overview
-Agent Workflow（代理工作流程，指協調語言模型、記憶檢索、規劃決策、工具調用與多代理協同的結構化控制邏輯與執行管線）是實現複雜自主任務的核心（Wang et al., 2024; Schick et al., 2023; Lewis et al., 2020; Liu et al., 2023）。
+Agent Workflow（代理工作流程，指協調語言模型、記憶檢索、規劃決策、工具調用與多代理協同的結構化控制邏輯與執行管線）是實現複雜自主任務的核心（Wang et al., 2024; Schick et al., 2023; Lewis et al., 2020; Liu et al., 2023; Shinn et al., 2023; Wang et al., 2023）。
 
 傳統的單次提示（one-shot prompting）或單向文字生成，無法處理具有前後相依性、需要中間動態驗證或多角色分工的複雜任務。藉由構建結構化的 Agent Workflow，系統能將高階目標分解為有序的子任務階段，並依據環境反饋即時修正執行軌跡（Wang et al., 2024）。
 
 > [!IMPORTANT]
 > **文獻引用特別聲明**：
 > 本頁面所提及之具體架構與演算法中：
-> 1. **直接 Ingest 之原始研究**：`02-toolformer.pdf`（Schick et al., 2023，嵌入式工具流）、`03-rag.pdf`（Lewis et al., 2020，檢索生成子流程）、`04-llm-plus-p.pdf`（Liu et al., 2023，外部符號規劃子流程）。
-> 2. **綜述回顧之次級引用**：ReAct、Reflexion、ChatDev、MetaGPT、ToT、GoT、RAP、DEPS、ReWOO 等方法，**其內容完全來自綜述文獻 `01-llm-agent-survey.pdf`（Wang et al., 2024）之回顧與歸納，本 Wiki 目前尚未直接 Ingest 這些個別方法的原始論文**。所有論點皆以相應文獻之描述為準。
+> 1. **直接 Ingest 之原始研究（Primary Citations）**：
+>    - `02-toolformer.pdf`（Schick et al., 2023，嵌入式工具流）
+>    - `03-rag.pdf`（Lewis et al., 2020，檢索生成子流程）
+>    - `04-llm-plus-p.pdf`（Liu et al., 2023，外部符號規劃子流程）
+>    - `05-reflexion.pdf`（Shinn et al., 2023，語言增強自我反思試錯迴圈）
+>    - `06-voyager.pdf`（Wang et al., 2023，具身終身學習課綱、技能庫與自我驗證迴圈）
+> 2. **綜述回顧之次級引用（Secondary Citations via Survey）**：
+>    - ReAct、ChatDev、MetaGPT、ToT、GoT、RAP、DEPS、ReWOO、Self-Refine 等方法，**其內容完全來自綜述文獻 `01-llm-agent-survey.pdf`（Wang et al., 2024）之回顧與歸納，本 Wiki 目前尚未直接 Ingest 這些個別方法的原始論文**。所有論點皆以相應文獻之描述為準。
 
 ## 2. Core Concept
 根據目前已 Ingest 來源文獻之梳理，文獻支持的 Agent Workflow 主要涵蓋以下核心型態：
@@ -26,9 +32,9 @@ Agent Workflow（代理工作流程，指協調語言模型、記憶檢索、規
 - **蒙地卡羅樹搜尋（MCTS）**：如 RAP，建立世界模型（World Model）模擬不同計畫的潛在效益，透過多輪 MCTS 迭代聚合出最終執行路徑。
 
 ### (3) 閉環回饋工作流程（Feedback Loop Workflows）
-打破單向執行，在行動後引入評估與重規劃環節（引自 Wang et al., 2024 綜述介紹）：
-- **環境感知回饋迴圈（Environmental Loop）**：如 ReAct 透過「思考-行動-觀察」（Thought-Act-Observation）三元組交替推進，根據外部工具或環境的即時 Observation 調整下一輪的 Thought；Voyager 與 Ghost 則依據程式執行回傳之錯誤訊息進行動態重規劃。
-- **自我反思優化迴圈（Model Feedback / Self-Refine Loop）**：如 Self-Refine 與 Reflexion，採取「輸出 $\to$ 評估反饋 $\to$ 修正」的迭代循環，直到產出符合標準為止。
+打破單向執行，在行動後引入評估與重規劃環節：
+- **環境感知回饋迴圈（Environmental Loop）**：如 ReAct 透過「思考-行動-觀察」（Thought-Act-Observation）三元組交替推進，根據外部工具或環境的即時 Observation 調整下一輪的 Thought（引自 Wang et al., 2024 綜述）；Voyager 則依據程式執行之環境反饋與錯誤訊息進行動態除錯與程式碼迭代重整（Wang et al., 2023）。
+- **自我反思優化迴圈（Model Feedback / Self-Refine Loop）**：如 Self-Refine（引自 Wang et al., 2024 綜述）採取「輸出 $\to$ 評估反饋 $\to$ 修正」的單次迭代；Reflexion 則將失敗反思寫入跨試驗情節記憶，形成多輪試錯優化迴圈（Shinn et al., 2023）。
 
 ### (4) 多代理協作工作流程（Multi-Agent Collaborative Workflow）
 多個具備不同 Profile 的 Agent 依照特定協作協議分工合作（引自 Wang et al., 2024 綜述介紹）：
@@ -47,6 +53,18 @@ Liu et al.（2023）在 LLM+P 中定義了自然語言轉譯與外部符號求�
 Lewis et al.（2020）在 RAG 中定義了端到端可微分的知識檢索增強子流程（*註：RAG 本身為 NLP 知識生成模型，可作為 Agent 記憶與知識檢索的底層組件，非完整 Autonomous Agent*）：
 - 輸入查詢 $x \to$ 稠密向量檢索器（DPR）於非參數化記憶（MIPS 索引）中快速檢索 Top-$K$ 相關文本區塊 $z \to$ 生成器（BART）將 $x$ 與 $z$ 拼接作為輸入 $\to$ 依據 RAG-Sequence 或 RAG-Token 邊緣化機率解碼輸出最終目標文字 $y$。
 
+### (8) 語言增強試錯反思工作流程（Verbal Reinforcement & Trial-and-Error Workflow）
+Shinn et al.（2023）在 Reflexion 中定義了基於文字回饋與情節記憶的多輪試驗優化工作流程：
+- 試驗階段：Actor 根據當前記憶與任務生成動作軌跡 $\tau_t$ $\to$ Evaluator 評估軌跡產出成敗或獎勵 $r_t$ $\to$ 若失敗，Self-Reflection 模型分析 $\{\tau_t, r_t\}$ 生成自然語言反思摘要 $sr_t$ $\to$ 將 $sr_t$ 追加至長期情節記憶緩衝區 $\text{mem}$（受滑動視窗 $\Omega \approx 1-3$ 限制） $\to$ 重置環境並展開下一輪試驗（Trial $t+1$），由 Actor 結合歷史反思重新規劃與執行。
+
+### (9) 具身終身學習與技能演化工作流程（Embodied Lifelong Learning & Skill Evolution Workflow）
+Wang et al.（2023）在 VOYAGER 中定義了結合自動課綱、技能庫與自我驗證的開放世界具身控制流程：
+- **課綱提議（Curriculum）**：Automatic Curriculum 根據代理即時狀態（背包、環境、生物）與歷史探索進度，自主提議由淺入深的新任務目標。
+- **技能檢索（Skill Retrieval）**：依據任務規劃與環境反饋，自 Skill Library 向量資料庫檢索 Top-5 相關技能程式碼。
+- **迭代提示控制迴圈（Iterative Prompting Loop，至多 4 輪嘗試）**：
+  - GPT-4 生成/微調控制程式碼 $\to$ Mineflayer 於 Minecraft 執行程式碼並收集環境反饋（`bot.chat()`）與解譯器語法/執行報錯 $\to$ GPT-4 Self-Verification Critic 評判任務是否真正完成並提供 Critique。
+- **技能固化與演化（Skill Commitment）**：若驗證成功，由 GPT-3.5 生成技能描述並計算 Embedding 索引，將程式碼存入技能庫，並更新課綱完成進度；若 4 輪皆失敗，課綱記錄失敗並切換至其他任務。
+
 ## 3. Why It Matters
 - **化解長程任務（Long-horizon Tasks）的脆弱性**：在複雜環境中，一開始擬定的初始計畫極難完美，一旦環境狀態改變或發生未預期錯誤，靜態流程便告崩潰；導入包含 Feedback 與動態 Re-planning 的工作流程能賦予代理適應性（Wang et al., 2024）。
 - **結合符號規劃以提升長程任務可行性**：單靠神經網路推論無法保證長程動作序列的前置條件完全滿足；透過嵌入 LLM+P 這類外部符號規劃子流程，在 Problem PDDL 正確且求解成功的條件下，能借助經典規劃器生成高可行性或最優計畫，但端到端表現仍取決於前端自然語言轉譯的準確性（Liu et al., 2023）。
@@ -62,7 +80,7 @@ Lewis et al.（2020）在 RAG 中定義了端到端可微分的知識檢索增�
   - 機制：模型依賴既有先驗一次性展開推導、調用工具或交由規劃器產生完整序列。
   - **Toolformer 限制釐清**：在 Toolformer 實驗中，作者為避免推論時產生無窮 API loop 而設定「每個輸入最多呼叫 1 次 API」的限制，這是**實驗推論層級的防禦性策略**，而非架構本身無法多重調用（Schick et al., 2023）。開環流程整體優點為推論快速且實作單純，但無法根據執行失敗即時調整策略。
 - **閉環流程（有回饋，Planning with Feedback）**：
-  - 代表方法：ReAct、DEPS、SayPlan、Reflexion（引自 Wang et al., 2024 綜述介紹）。
+  - 代表方法：ReAct、DEPS、SayPlan（引自 Wang et al., 2024 綜述介紹）；Reflexion 則由本專案已直接 Ingest 的 Shinn et al. (2023) 原始論文支持。
   - 機制：執行後由環境感知模組或批評器（Critic）產生反饋（如數值分數、環境狀態圖、詳細自然語言診斷）；Planning 模組接收反饋後啟動重規劃（Re-planning），形成動態修正迴圈。
 
 ### (2) 流程架構差異對照（Wiki 比較性分析）
@@ -70,7 +88,7 @@ Lewis et al.（2020）在 RAG 中定義了端到端可微分的知識檢索增�
 - **內部自回歸中斷/解碼視角（模型計算層次，如 Schick et al., 2023 與 Lewis et al., 2020）**：Toolformer 將工具執行視為語言模型自身解碼過程中的同步「中斷-填充」流程；RAG 則在模型架構內部透過潛在變數邊緣化完成「檢索-拼接-生成」流程，未建立外部排程狀態機。
 
 ## 5. Example
-*註：案例 1–3 引自 Wang et al. (2024) 綜述論文之回顧整理，非本 Wiki 已 Ingest 原始論文；案例 4–5 來自直接 Ingest 之原始文獻：*
+*註：案例 1–3 引自 Wang et al. (2024) 綜述論文之回顧整理，非本 Wiki 已 Ingest 原始論文；案例 4–7 來自直接 Ingest 之原始文獻：*
 1. **ReAct 工作流程（引自 Wang et al., 2024 綜述）**：
    - 階段 1（Thought）：Agent 根據目前目標分析現狀，思考需要哪些資訊。
    - 階段 2（Act）：輸出標準工具呼叫指令（如 `Search[主題]`）。
@@ -88,6 +106,10 @@ Lewis et al.（2020）在 RAG 中定義了端到端可微分的知識檢索增�
    - 使用者提出家務需求（如「整理咖啡桌與邊桌垃圾」） $\to$ GPT-4 依據 1-shot 範例轉譯為 Problem PDDL $\to$ Fast-Downward 規劃器結合預先定義之居家 Domain PDDL 搜尋可行/最優動作序列 $\to$ GPT-4 轉譯為機器人移動與夾取執行步驟。
 5. **RAG 檢索增強生成子流程（Lewis et al., 2020）**：
    - 輸入事實查詢 $\to$ DPR 計算查詢向量並於 FAISS 維基索引中檢索 Top-$K$ 文本 $\to$ BART 將查詢與文本拼接 $\to$ 依邊緣化機率自回歸解碼輸出答案。
+6. **Reflexion 語言增強試錯反思流程（Shinn et al., 2023）**：
+   - 在 AlfWorld 決策任務中，Trial 1 因動作順序不當導致在 desk 2 找不到檯燈而失敗 $\to$ Self-Reflection 模型產生反思「desk 1 上有檯燈，應先去 desk 1 取檯燈再找杯子」並寫入長期情節記憶 $\to$ Trial 2 Actor 讀取該反思，直接前往 desk 1 取得檯燈，順利完成任務。
+7. **VOYAGER 具身迭代提示與技能合成流程（Wang et al., 2023）**：
+   - VOYAGER 的 Automatic Curriculum 可提出 `Craft 1 stone pickaxe` 等任務；在 iterative prompting 的 Figure 5 中，另一個程式生成案例展示模型如何根據 environment feedback 發現材料不足並補充 planks/sticks，以及根據 execution error `No item named acacia_axe` 將不存在的 `acacia_axe` 修正為可用的 wooden axe。這些回饋會被加入下一輪 GPT-4 prompt，直到 self-verification 判定成功或最多完成 4 輪 code generation。一旦驗證成功，新技能程式碼即被存入向量資料庫以供後續複合任務檢索呼叫。
 
 ## 6. Limitations / Notes
 根據現有文獻明確指出的限制，以及當前批次資料的覆蓋邊界：
@@ -96,13 +118,15 @@ Lewis et al.（2020）在 RAG 中定義了端到端可微分的知識檢索增�
 3. **外部規劃管線依賴前提完備性**：LLM+P 的管線若要成功，仰賴人類專家預先給定完整無誤的領域規則（Domain PDDL），且若 LLM 轉譯出的 Problem PDDL 出現細微狀態遺漏，外部求解流程將直接宣告無解（Liu et al., 2023）。
 4. **推論延遲累積（Latency Overhead）**：多步驟串聯、多路徑搜尋（如 ToT、RAP）以及多代理反覆對話的工作流程，會使推論時間急遽增加（Wang et al., 2024）。
 5. **文獻覆蓋限制與未包含內容**：
-   - 本頁內容嚴格受限於已 Ingest 之 `01-llm-agent-survey.pdf`、`02-toolformer.pdf`、`03-rag.pdf` 與 `04-llm-plus-p.pdf`。
-   - 目前文獻尚未提及遊戲專用之「行為樹（Behavior Tree）」、「有限狀態機（FSM）」或「AI Director」等遊戲領域特定的工作流程整合方式（待後續遊戲應用批次文獻提供）。
+   - 本頁內容嚴格受限於已 Ingest 之 `01-llm-agent-survey.pdf`、`02-toolformer.pdf`、`03-rag.pdf`、`04-llm-plus-p.pdf`、`05-reflexion.pdf` 與 `06-voyager.pdf`。
+   - 目前文獻尚未提及遊戲專用之自建專案架構（如 Project E.X.I.T.）、AI Director 或即時遊戲狀態機（待後續遊戲應用內部來源批次文獻提供）。
 
 ## 7. References
-- **Wang et al. (2024)**: Lei Wang, Chen Ma, Xueyang Feng, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhi-Yuan Chen, Jiakai Tang, Xu Chen, Yankai Lin, Wayne Xin Zhao, Zhewei Wei, Ji-Rong Wen. *A Survey on Large Language Model based Autonomous Agents*. Frontiers of Computer Science, 2024. (arXiv:2308.11432v7, revised 2025-03-02, DOI: 10.1007/s11704-024-40231-1). [01-llm-agent-survey.pdf](../raw/01-llm-agent-survey.pdf)
+- **Wang et al. (2024)**: Lei Wang, Chen Ma, Xueyang Feng, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhi-Yuan Chen, Jiakai Tang, Xu Chen, Yankai Lin, Wayne Xin Zhao, Zhewei Wei, Ji-Rong Wen. *A Survey on Large Language Model based Autonomous Agents*. Frontiers of Computer Science, 2024, 18(6): 186345. (DOI: 10.1007/s11704-024-40231-1; arXiv:2308.11432v7, revised 2025-03-02). [01-llm-agent-survey.pdf](../raw/01-llm-agent-survey.pdf)
 - **Schick et al. (2023)**: Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Eric Hambro, Luke Zettlemoyer, Nicola Cancedda, Thomas Scialom. *Toolformer: Language Models Can Teach Themselves to Use Tools*. Advances in Neural Information Processing Systems 36 (NeurIPS 2023), 2023. (arXiv:2302.04761v1, Feb 2023). [02-toolformer.pdf](../raw/02-toolformer.pdf)
 - **Lewis et al. (2020)**: Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, Douwe Kiela. *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. Advances in Neural Information Processing Systems 33 (NeurIPS 2020), 2020. [03-rag.pdf](../raw/03-rag.pdf)
 - **Liu et al. (2023)**: Bo Liu, Yuqian Jiang, Xiaohan Zhang, Qiang Liu, Shiqi Zhang, Joydeep Biswas, Peter Stone. *LLM+P: Empowering Large Language Models with Optimal Planning Proficiency*. arXiv preprint arXiv:2304.11477v3 [cs.AI], 27 Sep 2023. [04-llm-plus-p.pdf](../raw/04-llm-plus-p.pdf)
+- **Shinn et al. (2023)**: Noah Shinn, Federico Cassano, Edward Berman, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao. *Reflexion: Language Agents with Verbal Reinforcement Learning*. arXiv preprint arXiv:2303.11366v4 [cs.AI], 10 Oct 2023. [05-reflexion.pdf](../raw/05-reflexion.pdf)（註：後續正式發表於 NeurIPS 2023，正式版作者名單未列 Edward Berman）。
+- **Wang et al. (2023)**: Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, Anima Anandkumar. *VOYAGER: An Open-Ended Embodied Agent with Large Language Models*. arXiv preprint arXiv:2305.16291v2 [cs.AI], 19 Oct 2023. [06-voyager.pdf](../raw/06-voyager.pdf)（註：後續正式發表於 TMLR, March 2024）。
 - **次級引用聲明（Secondary Citations via Survey）**：
-  - ReAct (Yao et al., 2022 / ICLR 2023)、ReWOO (Xu et al., 2023)、ChatDev (Qian et al., 2023)、ToT (Yao et al., 2023)、GoT (Besta et al., 2023)、RAP (Hao et al., 2023)、DEPS (Wang et al., 2023)、Self-Refine (Madaan et al., 2023)、Reflexion (Shinn et al., 2023) 等方法，本專案目前皆是經由 Wang et al. (2024) 綜述論文獲取其回顧性論點，尚未直接 Ingest 其原始研究論文。
+  - ReAct (Yao et al., 2022 / ICLR 2023)、ReWOO (Xu et al., 2023)、ChatDev (Qian et al., 2023)、ToT (Yao et al., 2023)、GoT (Besta et al., 2023)、RAP (Hao et al., 2023)、DEPS (Wang et al., 2023)、Self-Refine (Madaan et al., 2023) 等方法，本專案目前皆是經由 Wang et al. (2024) 綜述論文獲取其回顧性論點，尚未直接 Ingest 其原始研究論文。

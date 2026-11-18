@@ -84,7 +84,48 @@
 
 ---
 
+## Batch 3 Ingested Sources (第三批已處理來源)
+
+### 5. Reflexion: Language Agents with Verbal Reinforcement Learning
+- **Title**: Reflexion: Language Agents with Verbal Reinforcement Learning
+- **Author / Organization**:
+  - Ingested Source Authors (arXiv version): Noah Shinn, Federico Cassano, Edward Berman, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao / Northeastern University; Massachusetts Institute of Technology; Princeton University
+  - Formal Publication Note: 後續正式發表於 NeurIPS 2023 之論文作者名單未列 Edward Berman；本專案因實際 Ingest 之來源為 05-reflexion.pdf (arXiv v4)，故保留原始 PDF 之作者紀錄，並在此標註版本差異。
+- **Publication Year**: 2023
+- **Venue / Publication Information**:
+  - Ingested Source Version: arXiv preprint arXiv:2303.11366v4 [cs.AI], 10 Oct 2023. (arXiv / CoRR; 論文首頁標示: "Preprint. Under review.")
+  - Formal Publication: Advances in Neural Information Processing Systems 36 (NeurIPS 2023), Main Conference Track, 2023.
+- **Original URL or file reference**: [05-reflexion.pdf](../raw/05-reflexion.pdf) (arXiv:2303.11366)
+- **Source type**: External Source (學術研究論文 / Research Paper)
+- **Covered topics**:
+  - 語言增強學習（Verbal Reinforcement Learning，透過語言反饋強化代理政策，不更新模型神經網路參數）
+  - 三大核心模型：Actor ($M_a$ 行動生成)、Evaluator ($M_e$ 評估評分)、Self-Reflection ($M_{sr}$ 自我反思語言反饋)
+  - 記憶機制：短期軌跡記憶（Short-term Trajectory Memory）與長期情節經驗記憶（Long-term Episodic Memory，滑動視窗 $\Omega \approx 1-3$）
+  - 語意梯度（Semantic Gradient）：將稀疏/標量/二元獎勵訊號放大為具體自然語言反思，指導後續試驗（trial）
+  - 基準測試與評估：AlfWorld（決策）、HotPotQA（多跳推理）、HumanEval / MBPP / LeetcodeHardGym（程式碼生成與自建單元測試）
+  - 技術限制：依賴大模型自省能力（較大較強模型之湧現特性）、可能陷入局部最佳解（local minima）、對需要高探索度任務（如 WebShop）效果有限、無形式化成功保證
+
+---
+
+### 6. VOYAGER: An Open-Ended Embodied Agent with Large Language Models
+- **Title**: VOYAGER: An Open-Ended Embodied Agent with Large Language Models
+- **Author / Organization**: Guanzhi Wang*1,2, Yuqi Xie3, Yunfan Jiang*4, Ajay Mandlekar*1, Chaowei Xiao1,5, Yuke Zhu1,3, Linxi "Jim" Fan†1, Anima Anandkumar†1,2 (*共同第一作者, †共同指導) / 1NVIDIA, 2Caltech, 3UT Austin, 4Stanford, 5UW Madison
+- **Publication Year**: 2023 (arXiv preprint) / 2024 (Formal journal publication)
+- **Venue / Publication Information**: Publication: arXiv preprint arXiv:2305.16291v2 [cs.AI], 19 Oct 2023; formally published in Transactions on Machine Learning Research (TMLR), March 2024. (專案主頁: https://voyager.minedojo.org)
+- **Original URL or file reference**: [06-voyager.pdf](../raw/06-voyager.pdf) (arXiv:2305.16291)
+- **Source type**: External Source (學術研究論文 / Research Paper)
+- **Covered topics**:
+  - 具身終身學習代理（Embodied Lifelong Learning Agent）在開放世界（Minecraft / MineDojo）之探索與技能學習
+  - 三大核心組件：
+    1. Automatic Curriculum（自動課綱：利用 GPT-4 驅動由易到難、最大化探索的新奇度搜尋，以底部向上開展）
+    2. Skill Library（技能庫：以可執行的 JavaScript / Mineflayer 程式碼作為動作空間，以向量資料庫索引技能描述 Embedding，支援組合合成與緩解 [alleviates] 災難性遺忘）
+    3. Iterative Prompting Mechanism（迭代提示機制：結合環境反饋 Environment Feedback、程式執行錯誤 Execution Errors、GPT-4 自我驗證 Critic Self-Verification）
+  - 程式碼作為動作空間（Code as Action Space: 時間延展性、可解釋性、可組合性）
+  - 基準評測（MineDojo）：道具探索數量（3.3x 於基線）、地圖導航距離（2.3x）、科技樹解鎖速度（最多 15.3x，唯一解鎖鑽石工具）、新世界零樣本泛化（Zero-shot Generalization）
+  - 限制與觀察：GPT-4 API 運算成本高昂（比 GPT-3.5 貴 15 倍）、程式碼幻覺（如虛構物品、錯認無效燃料）、驗證器失誤、缺乏視覺感知（依賴 Mineflayer 文字與結構化狀態，非像素級控制）
+
+---
+
 ## Pending Sources (尚未 Ingest 之來源)
 *依據規範，待後續批次逐一處理，目前嚴禁讀取或引用：*
-- 外部來源 05–06（`raw/05-reflexion.pdf`, `raw/06-voyager.pdf`，待後續批次開放）
 - 內部來源：Project E.X.I.T. 設計文件（`../raw/project-exit-design.md`，待遊戲應用批次開放）

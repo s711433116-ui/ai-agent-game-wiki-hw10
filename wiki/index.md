@@ -10,11 +10,11 @@
 |---|---|---|---|
 | [ai-agent.md](ai-agent.md) | AI Agent 基本概念、四大模組架構（Profile, Memory, Planning, Action）、能力獲取途徑 | **已更新 (Batch 1)** | `01-llm-agent-survey.pdf`, `02-toolformer.pdf` |
 | [tool-use.md](tool-use.md) | Tool Use 概念、自監督工具學習、API 線性化格式、解碼機制與規模法則、限制 | **已更新 (Batch 1)** | `02-toolformer.pdf`, `01-llm-agent-survey.pdf` |
-| [agent-workflow.md](agent-workflow.md) | Agent Workflow 概念、單路徑/多路徑/回饋閉環/多代理協同流程、工具與規劃子流程 | **已更新 (Batch 1 & 2)** | `01-llm-agent-survey.pdf`, `02-toolformer.pdf`, `03-rag.pdf`, `04-llm-plus-p.pdf` |
+| [agent-workflow.md](agent-workflow.md) | Agent Workflow 概念、單路徑/多路徑/回饋閉環/多代理協同流程、工具與規劃子流程、試錯與具身工作流 | **已更新 (Batch 1, 2, 3)** | `01-llm-agent-survey.pdf`, `02-toolformer.pdf`, `03-rag.pdf`, `04-llm-plus-p.pdf`, `05-reflexion.pdf`, `06-voyager.pdf` |
 | [rag.md](rag.md) | 檢索增強生成（RAG）、參數化/非參數化記憶、RAG-Sequence/Token 模型、聯合訓練與熱插拔 | **已更新 (Batch 2)** | `03-rag.pdf` |
 | [planning.md](planning.md) | 規劃機制（Planning）、語言能力 vs 功能性能力、PDDL 形式化、LLM+P 外部規劃器管線 | **已更新 (Batch 2)** | `04-llm-plus-p.pdf`, `01-llm-agent-survey.pdf` |
-| [reflection.md](reflection.md) | 反思機制（Memory Reflection, Self-Refine, Reflexion） | *等待後續批次 Ingest* | - |
-| [game-application.md](game-application.md) | 生成式 AI 遊戲系統應用、Project E.X.I.T. 設計案例 | *等待後續批次 Ingest* | - |
+| [reflection.md](reflection.md) | 反思機制（Reflection）、語言增強學習（Verbal RL）、Reflexion 三核心模型、情節記憶緩衝區 | **已更新 (Batch 3)** | `05-reflexion.pdf`, `01-llm-agent-survey.pdf`, `06-voyager.pdf` |
+| [game-application.md](game-application.md) | 生成式 AI 遊戲系統應用、Voyager 具身終身學習研究案例（Project E.X.I.T. 待後續內部來源批次） | **已建立學術案例 (Batch 3)** | `06-voyager.pdf`, `01-llm-agent-survey.pdf` |
 
 ---
 
@@ -27,6 +27,10 @@
 ### Batch 2
 3. **03-rag.pdf**: Patrick Lewis et al. (2020), *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*, NeurIPS 2020.
 4. **04-llm-plus-p.pdf**: Bo Liu et al. (2023), *LLM+P: Empowering Large Language Models with Optimal Planning Proficiency*, arXiv:2304.11477v3 [cs.AI].
+
+### Batch 3
+5. **05-reflexion.pdf**: Noah Shinn et al. (2023), *Reflexion: Language Agents with Verbal Reinforcement Learning*, arXiv:2303.11366v4 [cs.AI]. (正式發表於 NeurIPS 2023).
+6. **06-voyager.pdf**: Guanzhi Wang et al. (2023), *VOYAGER: An Open-Ended Embodied Agent with Large Language Models*, arXiv:2305.16291v2 [cs.AI]. (正式發表於 TMLR 2024).
 
 ---
 
