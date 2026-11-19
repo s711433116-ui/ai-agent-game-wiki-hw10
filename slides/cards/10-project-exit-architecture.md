@@ -1,0 +1,23 @@
+# Evidence Card 10 — Project E.X.I.T. 架構與責任邊界
+
+- **Topic**: Agent Workflow / Game Application
+- **Claim / Teaching Point**: Project E.X.I.T. 可以用「Agent 元件層 + Game System 確定性規則層」呈現設計責任分工，但目前來源不足以定義一條固定的完整 orchestration sequence。
+- **Supporting Source**:
+  - `wiki/game-application.md`
+  - `wiki/agent-workflow.md`
+  - `raw/project-exit-design.md`
+- **Source Type**: **Internal Project Design Document / Wiki application mapping**
+- **Evidence Summary**:
+  - Agent roles：AI Director、Quest Agent、NPC Agent；另有 Game System。
+  - AI-related capabilities：Tool Use、RAG、Planning、Reflection、Agent Workflow。
+  - Game System 負責：角色移動、碰撞、HP 扣除、掉落機率、背包容量。
+  - AI Director 有六項 planned inputs 與四項 planned outputs。
+  - Wiki 明確記錄：來源未提供完整 agent-to-agent 執行順序、訊息格式或 orchestration state machine。
+- **Allowed Interpretation**:
+  - Slide 可畫「元件圖 / responsibility map」。
+  - 可用群組表示：Game State / Game System、AI Director / Quest Agent / NPC Agent、Tool Use / RAG / Planning / Reflection。
+  - 可標示資料或責任關係，但不要虛構每個節點的固定先後順序。
+- **Limitations**:
+  - 禁止畫成「Game State → AI Director → RAG → Planning → Tool Use → Reflection」這類來源未定義的唯一執行鏈。
+  - 禁止增加具體 Tool schema、Prompt、model、threshold 或 runtime frequency。
+- **Suggested Slide**: Slide 11 — 完整架構（應命名或呈現為「元件與責任邊界」較精確）

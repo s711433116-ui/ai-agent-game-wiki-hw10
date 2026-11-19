@@ -1,0 +1,21 @@
+# Evidence Card 07 — Agent Workflow
+
+- **Topic**: Agent Workflow
+- **Claim / Teaching Point**: Agent Workflow 是協調 Planning、Tool Use、Memory / Retrieval、Action 與 Feedback 的結構化控制方式；重要特徵不是某一個固定演算法，而是讓任務可以在執行與回饋之間形成可控制的流程。
+- **Supporting Source**:
+  - `wiki/agent-workflow.md`
+  - Wang et al. (2024)
+  - Schick et al. (2023)
+  - Lewis et al. (2020)
+  - Liu et al. (2023)
+  - Shinn et al. (2023)
+  - Wang et al. (2023, Voyager)
+- **Evidence Summary**:
+  - Wiki 整理 single-path、multi-path、feedback loop、multi-agent 等 workflow 型態。
+  - RAG、LLM+P 可作為可嵌入的 retrieval / planning 子流程。
+  - Reflexion 與 Voyager 展示明確的 feedback / retry 迴圈。
+- **Allowed Interpretation**: 可用「Plan → Act / Tool → Observe / Evaluate → Re-plan」作為閉環工作流程的教學示意，但需標示為 Wiki comparison，而非所有研究共同定義的唯一標準。
+- **Limitations**:
+  - 不同來源研究層級不同，不能把各自方法拼成作者共同提出的一個正式架構。
+  - ReAct、ReWOO、ChatDev 等在本 Wiki 中屬 Survey secondary citation。
+- **Suggested Slide**: Slide 8 — Agent Workflow

@@ -1,0 +1,23 @@
+# Evidence Card 09 — Project E.X.I.T. Internal Application Case
+
+- **Topic**: Game Application
+- **Claim / Teaching Point**: Project E.X.I.T. 設計文件規劃以 AI Director 讀取遊戲狀態，並搭配 Tool Use、RAG、Planning、Reflection 與 Agent Workflow；同時把明確的即時遊戲規則保留給一般遊戲程式處理。
+- **Supporting Source**:
+  - `wiki/game-application.md`
+  - `wiki/agent-workflow.md`
+  - `slides/sources.md`
+  - `raw/project-exit-design.md`
+- **Source Type**: **Internal Project Design Document / Application Case Source**
+- **Evidence Summary**:
+  - Core Loop：基地準備 → 接受任務 → 進入地圖 → 探索 / 搜刮 / 戰鬥 → AI 動態事件 → 撤離 → 結算 → 返回基地。
+  - Planned AI Director inputs：Player HP、Inventory、Location、Mission progress、Remaining time、Base resources。
+  - Planned outputs：Dynamic quest、Optional event、Risk warning、NPC response。
+  - Planned techniques：Tool Use、RAG、Planning、Reflection、Agent Workflow。
+  - Deterministic boundary：角色移動、碰撞、HP 扣除、掉落機率、背包容量由一般遊戲程式處理，不交給 LLM 即時決定。
+- **Allowed Interpretation**: 可作為「如何把學術 Agent 概念映射到遊戲設計」的教學案例。
+- **Limitations**:
+  - 全部屬 Design-stage / Planned。
+  - 文件沒有逐項宣告哪些功能已完成。
+  - 不能把本設計文件當作 AI Agent 有效性的學術證據。
+  - 未指定 model/provider、Prompt、Tool schema、RAG implementation、Planning algorithm、Reflection loop、觸發門檻或評估指標。
+- **Suggested Slide**: Slide 10 — Project E.X.I.T. 案例
