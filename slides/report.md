@@ -331,7 +331,17 @@ Programmatic Check：
 
 **12 / 12 slides 無偵測到 overflow**
 
-執行環境中的 Chromium screenshot 因 browser administrator policy 被阻擋，因此沒有將這個環境限制誤判成 deck error；改以 WeasyPrint fixed-page layout validation 檢查版面，並以 `node --check` 單獨驗證 navigation JavaScript。
+初版部署後再進行人工視覺檢查，發現多張投影片雖然沒有 overflow，但內容區塊被 `flex: 1` 撐高，造成卡片內或頁面下半部留白過多，版面密度偏低。這屬於版面配置問題，不涉及研究內容或來源錯誤。
+
+因此進入 **Render Loop 第 1 輪**，只調整 CSS 版面：
+- 移除多個內容區塊不必要的 full-height stretch
+- 放大部分圖表與資訊卡
+- 重新平衡短頁面的垂直留白
+- 不修改 Slide Draft、研究內容、數值或引用
+
+修正後再次以 1440 × 900 fixed-page layout validation 逐頁檢查，**12 / 12 slides 皆為單頁且無偵測到 overflow**。
+
+執行環境中的 Chromium screenshot 因 browser administrator policy 被阻擋，因此沒有將這個環境限制誤判成 deck error；版面檢查以 WeasyPrint fixed-page layout validation 完成，navigation JavaScript 另以 `node --check` 驗證。
 
 ---
 
@@ -369,7 +379,9 @@ Programmatic Check：
 - 大量 unsupported implementation details
 
 ### Slides
-問題已在 Evidence Card 與 Outline 階段提前限制，因此 Slide Fidelity Check 第一次即通過。
+內容問題已在 Evidence Card 與 Outline 階段提前限制，因此 Slide Fidelity Check 第一次即通過。
+
+初版 HTML 部署後，人工視覺檢查發現多頁版面密度偏低；此問題在 Render / Visual Review 節點發現，進入 Render Loop 第 1 輪後以 CSS layout fix 修正。
 
 ---
 
